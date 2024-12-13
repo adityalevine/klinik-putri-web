@@ -18,10 +18,10 @@ export const Footer = () => {
             <Link to="/" className="hover:text-black">
               Beranda
             </Link>
-            <Link to="/jadwal-dokter" className="hover:text-black">
+            <Link to="/schedule" className="hover:text-black">
               Jadwal Dokter
             </Link>
-            <Link to="/hubungi" className="hover:text-black">
+            <Link to="/contact" className="hover:text-black">
               Hubungi
             </Link>
           </div>
