@@ -45,22 +45,22 @@ const RegisterPage = () => {
           <div className="flex flex-col justify-center items-center">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleRegister)} className="w-full max-w-lg">
-                <Card className="p-5">
+                <Card className="p-5 shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-center">
+                    <CardTitle className="text-center text-[#159030]">
                       <h1>Registrasi</h1>
                     </CardTitle>
                     <CardDescription />
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-2">
+                  <CardContent className="flex flex-col gap-2 text-[#159030]">
                     <FormField
                       control={form.control}
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nama</FormLabel>
+                          <FormLabel>Nama Lengkap</FormLabel>
                           <FormControl>
-                            <Input placeholder="Masukkan Nama" {...field} />
+                            <Input placeholder="Masukkan Nama Lengkap" {...field} />
                           </FormControl>
                           <FormDescription>Nama wajib diisi dan hanya boleh mengandung huruf alfabet</FormDescription>
                           <FormMessage />
@@ -100,12 +100,14 @@ const RegisterPage = () => {
                   </CardContent>
                   <CardFooter>
                     <div className="flex flex-col w-full">
-                      <Button type="submit">Registrasi</Button>
+                      <Button type="submit" className="bg-[#159030] hover:bg-green-700">
+                        Registrasi
+                      </Button>
                       <div className="text-center mt-4">
                         <p className="text-gray-500">
                           Sudah punya akun?
                           <Link to="/login">
-                            <Button variant="link" className="p-1">
+                            <Button variant="link" className="p-1 text-[#159030]">
                               Masuk
                             </Button>
                           </Link>

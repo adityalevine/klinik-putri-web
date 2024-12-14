@@ -55,11 +55,11 @@ const SchedulePage = () => {
       <section>
         <div className="container mx-auto px-5 md:px-32">
           <div className="flex flex-col justify-center items-center">
-            <h2 className="text-2xl font-semibold">Dokter Umum</h2>
+            <h2 className="text-2xl font-semibold text-[#159030]">Dokter Umum</h2>
             <p className="text-xs md:text-sm my-6">Jadwal Dokter Umum 25 November - 1 Desember 2024</p>
 
             {/* Table */}
-            <Table className="border text-center">
+            <Table className="border text-center bg-white">
               <TableCaption />
               <TableHeader>
                 <TableRow>
@@ -87,11 +87,11 @@ const SchedulePage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center pt-10">
-            <h2 className="text-2xl font-semibold">Dokter Spesialis</h2>
+            <h2 className="text-2xl font-semibold text-[#159030]">Dokter Spesialis</h2>
             <p className="text-xs md:text-sm my-6">Jadwal Dokter Spesialis Tahun 2024</p>
 
             {/* Table */}
-            <Table className="border text-center">
+            <Table className="border text-center bg-white">
               <TableCaption />
               <TableHeader>
                 <TableRow>

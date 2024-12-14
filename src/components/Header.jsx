@@ -15,21 +15,21 @@ export const Header = () => {
 
   return (
     <header className="fixed w-full top-0 left-0 border-b bg-white px-5 z-10">
-      <div className="container mx-auto flex justify-between items-center h-16 md:justify-around">
-        {/* Brand */}
-        <Link to="/" className="text-2xl font-bold">
-          Klinik Putri
+      <div className="container mx-auto flex justify-between items-center h-20 md:justify-around">
+        {/* Logo */}
+        <Link to="/">
+          <img src="/logo.svg" alt="Logo" width={70} />
         </Link>
 
         {/* Navigation (Hidden on Mobile) */}
-        <nav className={`${menuOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row items-center md:space-x-6 absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none p-4 md:p-0`}>
-          <Link to="/" className={`${isActive("/") ? "text-black" : "text-gray-500"} font-medium hover:text-black py-2 md:py-0`} onClick={toggleMenu}>
+        <nav className={`${menuOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row items-center md:space-x-6 absolute md:static top-20 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none p-4 md:p-0`}>
+          <Link to="/" className={`${isActive("/") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030] py-2 md:py-0`} onClick={toggleMenu}>
             Beranda
           </Link>
-          <Link to="/schedule" className={`${isActive("/schedule") ? "text-black" : "text-gray-500"} font-medium hover:text-black py-2 md:py-0`} onClick={toggleMenu}>
+          <Link to="/schedule" className={`${isActive("/schedule") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030] py-2 md:py-0`} onClick={toggleMenu}>
             Jadwal Dokter
           </Link>
-          <Link to="/contact" className={`${isActive("/contact") ? "text-black" : "text-gray-500"} font-medium hover:text-black py-2 md:py-0`} onClick={toggleMenu}>
+          <Link to="/contact" className={`${isActive("/contact") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030] py-2 md:py-0`} onClick={toggleMenu}>
             Hubungi
           </Link>
         </nav>
@@ -37,10 +37,12 @@ export const Header = () => {
         {/* Buttons */}
         <div className="hidden md:flex space-x-4">
           <Link to="/login">
-            <Button variant="outline">Masuk</Button>
+            <Button variant="outline" className="w-28 text-[#159030] hover:text-[#159030] border-[#159030]">
+              Masuk
+            </Button>
           </Link>
           <Link to="/register">
-            <Button>Daftar</Button>
+            <Button className="w-28 bg-[#159030] hover:bg-green-700">Registrasi</Button>
           </Link>
         </div>
 
@@ -51,23 +53,23 @@ export const Header = () => {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 p-4">
-            <Link to="/" className={`${isActive("/") ? "text-black" : "text-gray-500"} font-medium hover:text-black`} onClick={toggleMenu}>
+          <div className="md:hidden absolute top-20 left-0 w-full bg-white shadow-md flex flex-col items-center space-y-4 p-4">
+            <Link to="/" className={`${isActive("/") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030]`} onClick={toggleMenu}>
               Beranda
             </Link>
-            <Link to="/schedule" className={`${isActive("/schedule") ? "text-black" : "text-gray-500"} font-medium hover:text-black`} onClick={toggleMenu}>
+            <Link to="/schedule" className={`${isActive("/schedule") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030]`} onClick={toggleMenu}>
               Jadwal Dokter
             </Link>
-            <Link to="/contact" className={`${isActive("/contact") ? "text-black" : "text-gray-500"} font-medium hover:text-black`} onClick={toggleMenu}>
+            <Link to="/contact" className={`${isActive("/contact") ? "text-[#159030]" : "text-gray-500"} font-medium hover:text-[#159030]`} onClick={toggleMenu}>
               Hubungi
             </Link>
             <Link to="/login" onClick={toggleMenu}>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full text-[#159030] hover:text-[#159030] border-[#159030]">
                 Masuk
               </Button>
             </Link>
             <Link to="/register" onClick={toggleMenu}>
-              <Button>Daftar</Button>
+              <Button className="w-full bg-[#159030] hover:bg-green-700">Registrasi</Button>
             </Link>
           </div>
         )}

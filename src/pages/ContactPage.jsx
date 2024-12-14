@@ -8,7 +8,7 @@ const ContactPage = () => {
       <section>
         <div className="container mx-auto px-5 md:px-32">
           <div className="flex flex-col justify-center items-center">
-            <h2 className="text-2xl font-semibold">Hubungi Kami</h2>
+            <h2 className="text-2xl font-semibold text-[#159030]">Hubungi Kami</h2>
             <p className="text-xs md:text-sm my-6">Hubungi kami untuk mendapatkan informasi seputar layanan di Klinik Putri</p>
 
             <div className="flex flex-wrap justify-center items-center columns-2 gap-5 px-5">

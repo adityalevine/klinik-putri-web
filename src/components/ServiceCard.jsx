@@ -9,7 +9,7 @@ export const ServiceCard = (props) => {
     <Card className="shadow-md mb-5">
       <CardHeader className="p-0">
         <img src={img} alt="Layanan Spesialisasi" width={326} className="rounded-lg" />
-        <CardTitle className="text-center text-lg">{title}</CardTitle>
+        <CardTitle className="ms-6 text-lg text-[#159030]">{title}</CardTitle>
         <CardDescription />
       </CardHeader>
       <CardContent className="flex justify-between text-sm mt-2">
@@ -18,7 +18,7 @@ export const ServiceCard = (props) => {
       </CardContent>
       <CardFooter className="flex justify-end">
         <Link to="/login">
-          <Button>Reservasi</Button>
+          <Button className="w-28 bg-[#159030] hover:bg-green-700">Reservasi</Button>
         </Link>
       </CardFooter>
     </Card>
