@@ -59,7 +59,7 @@ const SchedulePage = () => {
             <p className="text-xs md:text-sm my-6">Jadwal Dokter Umum 25 November - 1 Desember 2024</p>
 
             {/* Table */}
-            <Table className="border text-center bg-white">
+            <Table className="border text-center">
               <TableCaption />
               <TableHeader>
                 <TableRow>
@@ -91,7 +91,7 @@ const SchedulePage = () => {
             <p className="text-xs md:text-sm my-6">Jadwal Dokter Spesialis Tahun 2024</p>
 
             {/* Table */}
-            <Table className="border text-center bg-white">
+            <Table className="border text-center">
               <TableCaption />
               <TableHeader>
                 <TableRow>

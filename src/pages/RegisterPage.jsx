@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { axiosInstance } from "@/lib/axios";
+import { Toaster, toast } from "react-hot-toast";
 
 const registerFormSchema = z.object({
   name: z
@@ -17,11 +19,13 @@ const registerFormSchema = z.object({
     .string()
     .min(3, "Username kurang dari 3 karakter")
     .max(16, "Username lebih dari 16 karakter")
-    .regex(/^[a-z0-9]+$/, "Username hanya boleh berisi huruf kecil dan angka."),
+    .regex(/^[a-z0-9]+$/, "Username hanya boleh berisi huruf kecil dan angka"),
   password: z.string().min(8, "Password kurang dari 8 karakter"),
 });
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
   const form = useForm({
     defaultValues: {
       role: "User",
@@ -33,16 +37,47 @@ const RegisterPage = () => {
     reValidateMode: "onSubmit",
   });
 
-  const handleRegister = (values) => {
-    alert(values);
-    console.log(values);
+  const handleRegister = async (values) => {
+    try {
+      const usernameResponse = await axiosInstance.get("/users", {
+        params: {
+          username: values.username,
+        },
+      });
+
+      if (usernameResponse.data.length) {
+        toast.error("Username sudah terdaftar");
+        return;
+      }
+
+      await axiosInstance.post("/users", {
+        role: "User",
+        name: values.name,
+        username: values.username,
+        password: values.password,
+      });
+
+      toast.success("Berhasil mendaftar");
+      form.reset();
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (err) {
+      toast.error("Gagal mendaftar. Silakan coba lagi");
+      console.log(err);
+    }
   };
 
   return (
     <main className="min-h-[80vh] pt-36 pb-10 bg-gray-100">
+      {/* Toaster */}
+      <Toaster position="top-center" reverseOrder={false} />
+
+      {/* Registrasi Section */}
       <section>
         <div className="container mx-auto px-5 md:px-32">
           <div className="flex flex-col justify-center items-center">
+            {/* Form */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleRegister)} className="w-full max-w-lg">
                 <Card className="p-5 shadow-lg">
@@ -52,13 +87,13 @@ const RegisterPage = () => {
                     </CardTitle>
                     <CardDescription />
                   </CardHeader>
-                  <CardContent className="flex flex-col gap-2 text-[#159030]">
+                  <CardContent className="flex flex-col gap-2">
                     <FormField
                       control={form.control}
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nama Lengkap</FormLabel>
+                          <FormLabel className="text-[#159030]">Nama Lengkap</FormLabel>
                           <FormControl>
                             <Input placeholder="Masukkan Nama Lengkap" {...field} />
                           </FormControl>
@@ -73,7 +108,7 @@ const RegisterPage = () => {
                       name="username"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Username</FormLabel>
+                          <FormLabel className="text-[#159030]">Username</FormLabel>
                           <FormControl>
                             <Input placeholder="Masukkan Username" {...field} />
                           </FormControl>
@@ -88,7 +123,7 @@ const RegisterPage = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Kata Sandi</FormLabel>
+                          <FormLabel className="text-[#159030]">Kata Sandi</FormLabel>
                           <FormControl>
                             <Input placeholder="Masukkan Kata Sandi" {...field} type="password" />
                           </FormControl>

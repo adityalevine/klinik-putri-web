@@ -41,15 +41,10 @@ const HomePage = () => {
 
             <div className="flex flex-wrap justify-center items-center columns-3 gap-5">
               <ServiceCard img="/kebidanan.png" title="Kebidanan dan Kandungan" day="Senin - Sabtu" time="19.00 - 21.00" />
-
               <ServiceCard img="/kejiwaan.png" title="Kejiwaan" day="Setiap Hari" time="15.00 - Selesai" />
-
               <ServiceCard img="/tht.png" title="THT-KL" day="Setiap Hari" time="15.00 - Selesai" />
-
               <ServiceCard img="/bedah.png" title="Bedah" day="Setiap Hari" time="15.00 - Selesai" />
-
               <ServiceCard img="/jantung.png" title="Jantung" day="Setiap Hari" time="15.00 - Selesai" />
-
               <ServiceCard img="/umum.png" title="Umum" day="Setiap Hari" time="24 Jam" />
             </div>
           </div>
