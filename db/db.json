@@ -5,14 +5,16 @@
       "role": "Admin",
       "name": "Admin",
       "username": "admin",
-      "password": "password"
+      "password": "password",
+      "profile_url": "/avatar.png"
     },
     {
       "id": "2",
       "role": "User",
       "name": "Asty",
       "username": "asty",
-      "password": "password"
+      "password": "password",
+      "profile_url": "/avatar.png"
     }
   ]
 }

@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import SchedulePage from "./pages/SchedulePage";
 import ContactPage from "./pages/ContactPage";
+import ProfilePage from "./pages/ProfilePage";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
@@ -29,7 +30,9 @@ function App() {
         payload: {
           id: userResponse.data.id,
           role: userResponse.data.role,
+          name: userResponse.data.name,
           username: userResponse.data.username,
+          profile_url: userResponse.data.profile_url,
         },
       });
     } catch (err) {
@@ -60,6 +63,7 @@ function App() {
         <Route path="/login" Component={LoginPage} />
         <Route path="/schedule" Component={SchedulePage} />
         <Route path="/contact" Component={ContactPage} />
+        <Route path="/profile" Component={ProfilePage} />
 
         <Route path="*" Component={NotFoundPage} />
       </Routes>

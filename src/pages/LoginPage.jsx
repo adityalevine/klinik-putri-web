@@ -45,21 +45,19 @@ const LoginPage = () => {
         return;
       }
 
-      console.log(userResponse.data);
-      alert(`Berhasil masuk ${values.username}`);
-
       dispatch({
         type: "USER_LOGIN",
         payload: {
           id: userResponse.data[0].id,
           role: userResponse.data[0].role,
+          name: userResponse.data[0].name,
           username: userResponse.data[0].username,
+          profile_url: userResponse.data[0].profile_url,
         },
       });
 
       localStorage.setItem("current-user", userResponse.data[0].id);
-
-      // toast.success(`Berhasil masuk! Selamat datang, ${values.username}.`);
+      toast.success(`Berhasil masuk! Selamat datang ${values.username}`);
       // form.reset();
       // setTimeout(() => {
       //   navigate("/");

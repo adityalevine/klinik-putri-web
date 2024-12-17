@@ -55,6 +55,7 @@ const RegisterPage = () => {
         name: values.name,
         username: values.username,
         password: values.password,
+        profile_url: "https://tl.vhv.rs/dpng/s/541-5413387_log-in-sign-up-micro-environment-diagram-hd.png",
       });
 
       toast.success("Berhasil mendaftar");
