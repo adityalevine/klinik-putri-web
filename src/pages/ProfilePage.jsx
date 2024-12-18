@@ -46,7 +46,7 @@ const ProfilePage = () => {
       });
 
       dispatch({
-        type: "UPDATE_PROFILE",
+        type: "USER_PROFILE",
         payload: { profile_url: updatedImage },
       });
 
@@ -68,6 +68,7 @@ const ProfilePage = () => {
         <div className="container mx-auto px-5 md:px-32 text-center">
           <h2 className="text-2xl font-semibold mb-5">Profil Pengguna</h2>
 
+          {/* Breadcrumb */}
           <Breadcrumb className="flex justify-center items-center">
             <BreadcrumbList className="text-white">
               <BreadcrumbItem>
@@ -87,12 +88,13 @@ const ProfilePage = () => {
         <div className="container mx-auto px-5 md:px-32 mt-10">
           <div className="flex flex-wrap justify-center items-center rounded-lg py-20  shadow-lg bg-white">
             <div className="flex flex-nowrap gap-4 md:flex-col justify-center items-center w-full md:w-1/2">
+              {/* Avatar */}
               <Avatar className="w-40 h-40 mb-3 border-2 border-white shadow-lg">
                 <AvatarImage src={selectedImage} />
                 <AvatarFallback />
               </Avatar>
 
-              {/* AlertDialog untuk Pilih Foto */}
+              {/* AlertDialog */}
               <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <AlertDialogTrigger asChild>
                   <Button className="w-28 bg-[#159030] hover:bg-green-700">Pilih Foto</Button>

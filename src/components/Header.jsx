@@ -22,6 +22,10 @@ export const Header = () => {
     navigate("/profile");
   };
 
+  const handleHistory = () => {
+    navigate("/history");
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("current-user");
 
@@ -65,7 +69,7 @@ export const Header = () => {
                     <IoPersonOutline />
                     Profil
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleHistory}>
                     <LucideHistory />
                     Riwayat Reservasi
                   </DropdownMenuItem>
@@ -112,7 +116,7 @@ export const Header = () => {
                     <IoPersonOutline />
                     Profil
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleHistory}>
                     <LucideHistory />
                     Riwayat Reservasi
                   </DropdownMenuItem>

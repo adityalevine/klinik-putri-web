@@ -16,5 +16,56 @@
       "password": "password",
       "profile_url": "/avatar.png"
     }
+  ],
+  "reservations": [
+    {
+      "id": 1,
+      "img": "/kebidanan.png",
+      "specialization": "Kebidanan dan Kandungan",
+      "day": "Senin - Sabtu",
+      "time": "19.00 - 21.00"
+    },
+    {
+      "id": 2,
+      "img": "/kejiwaan.png",
+      "specialization": "Kejiwaan",
+      "day": "Setiap Hari",
+      "time": "15.00 - Selesai"
+    },
+    {
+      "id": 3,
+      "img": "/tht.png",
+      "specialization": "THT-KL",
+      "day": "Setiap Hari",
+      "time": "15.00 - Selesai"
+    },
+    {
+      "id": 4,
+      "img": "/bedah.png",
+      "specialization": "Bedah",
+      "day": "Setiap Hari",
+      "time": "15.00 - Selesai"
+    },
+    {
+      "id": 5,
+      "img": "/jantung.png",
+      "specialization": "Jantung",
+      "day": "Setiap Hari",
+      "time": "15.00 - Selesai"
+    },
+    {
+      "id": 6,
+      "img": "/umum.png",
+      "specialization": "Umum",
+      "day": "Setiap Hari",
+      "time": "24 Jam"
+    }
+  ],
+  "history": [
+    {
+      "id": "48aa",
+      "userId": "2",
+      "date": "2024-12-18"
+    }
   ]
 }

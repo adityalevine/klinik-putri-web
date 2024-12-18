@@ -17,11 +17,12 @@ export const userReducer = (state = DEFAULT_STATE, action) => {
     dupState.profile_url = action.payload.profile_url;
 
     return dupState;
-  } else if (action.type === "UPDATE_PROFILE") {
-    return {
-      ...state,
-      profile_url: action.payload.profile_url,
-    };
+  } else if (action.type === "USER_PROFILE") {
+    const dupState = { ...state };
+
+    dupState.profile_url = action.payload.profile_url;
+
+    return dupState;
   } else if (action.type === "USER_LOGOUT") {
     return DEFAULT_STATE;
   }

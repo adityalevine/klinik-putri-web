@@ -1,5 +1,7 @@
-import { ServiceCard } from "@/components/ServiceCard";
+import { ReservationCard } from "@/components/ReservationCard";
 import { Button } from "@/components/ui/button";
+import { axiosInstance } from "@/lib/axios";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const scrollToService = (e) => {
@@ -7,6 +9,28 @@ const HomePage = () => {
     const section = document.getElementById("service");
     section.scrollIntoView({ behavior: "smooth" });
   };
+
+  const [reservations, setReservations] = useState([]);
+
+  const reservationsList = reservations.map((reservation) => {
+    return <ReservationCard key={reservation.id} id={reservation.id} img={reservation.img} specialization={reservation.specialization} day={reservation.day} time={reservation.time} />;
+  });
+
+  const fetchReservations = async () => {
+    try {
+      const reservationsResponse = await axiosInstance.get("/reservations");
+
+      setReservations(reservationsResponse.data);
+      console.log(reservationsResponse.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchReservations();
+  }, []);
 
   return (
     <main className="min-h-[80vh] pt-36 pb-10 bg-gray-100">
@@ -39,14 +63,7 @@ const HomePage = () => {
           <div className="flex flex-col">
             <h2 className="flex justify-center items-center text-2xl font-semibold pt-20 pb-5 text-[#159030]">Layanan Spesialisasi</h2>
 
-            <div className="flex flex-wrap justify-center items-center columns-3 gap-5">
-              <ServiceCard img="/kebidanan.png" title="Kebidanan dan Kandungan" day="Senin - Sabtu" time="19.00 - 21.00" />
-              <ServiceCard img="/kejiwaan.png" title="Kejiwaan" day="Setiap Hari" time="15.00 - Selesai" />
-              <ServiceCard img="/tht.png" title="THT-KL" day="Setiap Hari" time="15.00 - Selesai" />
-              <ServiceCard img="/bedah.png" title="Bedah" day="Setiap Hari" time="15.00 - Selesai" />
-              <ServiceCard img="/jantung.png" title="Jantung" day="Setiap Hari" time="15.00 - Selesai" />
-              <ServiceCard img="/umum.png" title="Umum" day="Setiap Hari" time="24 Jam" />
-            </div>
+            <div className="flex flex-wrap justify-center items-center columns-3 gap-5">{reservationsList}</div>
           </div>
         </div>
       </section>

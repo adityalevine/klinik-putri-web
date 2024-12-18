@@ -7,11 +7,13 @@ import LoginPage from "./pages/LoginPage";
 import SchedulePage from "./pages/SchedulePage";
 import ContactPage from "./pages/ContactPage";
 import ProfilePage from "./pages/ProfilePage";
+import HistoryPage from "./pages/HistoryPage";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
 import { useEffect, useState } from "react";
 import Spinner from "./components/ui/spinner";
+import ReservationDetailPage from "./pages/ReservationDetailPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -64,6 +66,8 @@ function App() {
         <Route path="/schedule" Component={SchedulePage} />
         <Route path="/contact" Component={ContactPage} />
         <Route path="/profile" Component={ProfilePage} />
+        <Route path="/history" Component={HistoryPage} />
+        <Route path="/reservation/:reservationId" Component={ReservationDetailPage} />
 
         <Route path="*" Component={NotFoundPage} />
       </Routes>
