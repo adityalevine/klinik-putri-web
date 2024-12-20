@@ -4,7 +4,7 @@ import { IoMenu, IoCloseOutline, IoPersonOutline, IoLogOutOutline } from "react-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { LucideHistory } from "lucide-react";
+import { LucideHistory, LucideLayoutDashboard } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Header = () => {
@@ -20,6 +20,10 @@ export const Header = () => {
 
   const handleProfile = () => {
     navigate("/profile");
+  };
+
+  const handleDashboard = () => {
+    navigate("/admin/dashboard");
   };
 
   const handleHistory = () => {
@@ -69,6 +73,12 @@ export const Header = () => {
                     <IoPersonOutline />
                     Profil
                   </DropdownMenuItem>
+                  {userSelector.role !== "Admin" ? null : (
+                    <DropdownMenuItem onClick={handleDashboard}>
+                      <LucideLayoutDashboard />
+                      Dashboard
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={handleHistory}>
                     <LucideHistory />
                     Riwayat Reservasi
@@ -116,6 +126,12 @@ export const Header = () => {
                     <IoPersonOutline />
                     Profil
                   </DropdownMenuItem>
+                  {userSelector.role !== "Admin" ? null : (
+                    <DropdownMenuItem onClick={handleDashboard}>
+                      <LucideLayoutDashboard />
+                      Dashboard
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={handleHistory}>
                     <LucideHistory />
                     Riwayat Reservasi

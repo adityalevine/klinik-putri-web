@@ -8,14 +8,17 @@ import SchedulePage from "./pages/SchedulePage";
 import ContactPage from "./pages/ContactPage";
 import ProfilePage from "./pages/ProfilePage";
 import HistoryPage from "./pages/HistoryPage";
-import { Routes, Route } from "react-router-dom";
+import ReservationDetailPage from "./pages/ReservationDetailPage";
+import DashboardManagementPage from "./pages/admin/DashboardManagementPage";
+import SpecializationManagementPage from "./pages/admin/SpecializationManagementPage";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
 import { useEffect, useState } from "react";
 import Spinner from "./components/ui/spinner";
-import ReservationDetailPage from "./pages/ReservationDetailPage";
 
 function App() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -58,7 +61,8 @@ function App() {
 
   return (
     <>
-      <Header />
+      {!location.pathname.startsWith("/admin") ? <Header /> : null}
+
       <Routes>
         <Route path="/" Component={HomePage} />
         <Route path="/register" Component={RegisterPage} />
@@ -69,9 +73,15 @@ function App() {
         <Route path="/history" Component={HistoryPage} />
         <Route path="/reservation/:reservationId" Component={ReservationDetailPage} />
 
+        <Route path="/admin">
+          <Route path="dashboard" Component={DashboardManagementPage} />
+          <Route path="specialization" Component={SpecializationManagementPage} />
+        </Route>
+
         <Route path="*" Component={NotFoundPage} />
       </Routes>
-      <Footer />
+
+      {!location.pathname.startsWith("/admin") ? <Footer /> : null}
     </>
   );
 }

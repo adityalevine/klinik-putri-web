@@ -13,7 +13,9 @@ const HomePage = () => {
   const [reservations, setReservations] = useState([]);
 
   const reservationsList = reservations.map((reservation) => {
-    return <ReservationCard key={reservation.id} id={reservation.id} img={reservation.img} specialization={reservation.specialization} day={reservation.day} time={reservation.time} />;
+    return (
+      <ReservationCard key={reservation.id} id={reservation.id} image_url={reservation.image_url} specialization={reservation.specialization} desc_day={reservation.desc_day} desc_time={reservation.desc_time} status={reservation.status} />
+    );
   });
 
   const fetchReservations = async () => {
@@ -21,13 +23,13 @@ const HomePage = () => {
       const reservationsResponse = await axiosInstance.get("/reservations");
 
       setReservations(reservationsResponse.data);
-      console.log(reservationsResponse.data);
     } catch (err) {
       console.log(err);
     } finally {
     }
   };
 
+  // Mount
   useEffect(() => {
     fetchReservations();
   }, []);

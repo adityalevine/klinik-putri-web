@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
@@ -13,30 +14,55 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import SelectTime from "@/components/SelectTime";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "@/lib/axios";
 import { useSelector } from "react-redux";
+import { Input } from "@/components/ui/input";
+import { SignedInPage } from "@/components/guard/SignedInPage";
 
-const FormSchema = z.object({
+const reservasiFormSchema = z.object({
   date: z.date({
     required_error: "Hari reservasi dokter diperlukan",
   }),
+  name: z
+    .string()
+    .min(3, "Nama terlalu pendek")
+    .max(50, "Nama terlalu panjang")
+    .regex(/^[a-zA-Z\s]+$/, "Nama hanya boleh berisi huruf dan spasi"),
+  age: z.string().min(1, "Umur harus diisi").max(3, "Umur tidak boleh lebih dari 3 digit"),
+  phone_number: z
+    .string()
+    .min(10, "Nomor telepon terlalu pendek")
+    .max(15, "Nomor telepon terlalu panjang")
+    .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
+  address: z.string().nonempty("Alamat tidak boleh kosong"),
+  gender: z.string().nonempty("Silakan pilih jenis kelamin"),
 });
 
 const ReservationDetailPage = () => {
   const params = useParams();
   const [reservation, setReservation] = useState({
-    id: 0,
+    id: "",
     img: "",
     specialization: "",
-    day: "",
-    time: "",
+    desc_day: "",
+    desc_time: "",
+    available_times: [],
+    reserved_dates: [],
   });
   const [selectedTime, setSelectedTime] = useState(null);
   const userSelector = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const form = useForm({
-    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: "",
+      age: "",
+      phone_number: "",
+      address: "",
+      gender: "",
+    },
+    resolver: zodResolver(reservasiFormSchema),
   });
 
   const handleTimeSelect = (time) => {
@@ -54,111 +80,218 @@ const ReservationDetailPage = () => {
 
   const handleReservation = async (values) => {
     try {
-      const reservationResponse = await axiosInstance.post("/history", {
+      await axiosInstance.post("/history", {
         userId: userSelector.id,
         date: format(values.date, "yyyy-MM-dd", { locale: localeId }),
-        time: values.time,
-        specialization: values.specialization,
+        time: selectedTime,
+        specialization: reservation.specialization,
+        name: values.name,
+        age: values.age,
+        phone_number: values.phone_number,
+        address: values.address,
+        gender: values.gender,
+        status: "Proses",
       });
-      console.log(reservationResponse.data);
+
+      toast.success("Berhasil membuat reservarsi");
+      form.reset();
+      setTimeout(() => {
+        navigate("/history");
+      }, 2000);
     } catch (err) {
+      toast.error("Gagal membuat reservasi. Silakan coba lagi");
       console.log(err);
     }
   };
 
+  // Mount
   useEffect(() => {
     fetchReservations();
   }, []);
 
   return (
-    <main className="min-h-[80vh] pt-20 pb-10 bg-gray-100">
-      {/* Toaster */}
-      <Toaster position="top-center" reverseOrder={false} />
+    <SignedInPage>
+      <main className="min-h-[80vh] pt-20 pb-10 bg-gray-100">
+        {/* Toaster */}
+        <Toaster position="top-center" reverseOrder={false} />
 
-      {/* Reservation Header Section */}
-      <section className="bg-[#159030] text-white py-10">
-        <div className="container mx-auto px-5 md:px-32 text-center">
-          <h2 className="text-2xl font-semibold mb-5">Detail Spesialis</h2>
+        {/* Reservation Header Section */}
+        <section className="bg-[#159030] text-white py-10">
+          <div className="container mx-auto px-5 md:px-32 text-center">
+            <h2 className="text-2xl font-semibold mb-5">Detail Spesialis</h2>
 
-          {/* Breadcrumb */}
-          <Breadcrumb className="flex justify-center items-center">
-            <BreadcrumbList className="text-white">
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Beranda</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-white font-bold">Detail Spesialis</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-      </section>
+            {/* Breadcrumb */}
+            <Breadcrumb className="flex justify-center items-center">
+              <BreadcrumbList className="text-white">
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Beranda</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="text-white font-bold">Detail Spesialis</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </section>
 
-      {/* Reservation Content Section */}
-      <section>
-        <div className="container mx-auto px-5 md:px-32 mt-10">
-          <div className="flex flex-wrap justify-center items-center">
-            <div className="w-full md:w-1/2">
-              <h2>Tanggal dan Waktu Konsultasi</h2>
-
-              {/* Form, Popover & Calendar*/}
+        {/* Reservation Content Section */}
+        <section>
+          <div className="container mx-auto px-5 md:px-32 mt-10">
+            <div className="flex flex-wrap">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleReservation)} className="space-y-8">
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel />
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button variant={"outline"} className={`w-[240px] pl-3 text-left font-normal border-[#159030] text-[#159030] bg-white hover:bg-[#159030] hover:text-white`}>
-                                {field.value ? format(field.value, "dd-MM-yyyy", { locale: localeId }) : <span>Pick a date</span>}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date > new Date() || date < new Date("1900-01-01")} initialFocus />
-                          </PopoverContent>
-                        </Popover>
-                        <FormDescription />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </form>
+                <div className="w-full md:w-1/2">
+                  <h2 className="font-semibold mb-3 text-[#159030]">Tanggal dan Waktu Konsultasi</h2>
 
-                <div className="flex flex-col justify-center items-center columns-5">
-                  {/* Mengirim waktu yang dipilih ke state */}
-                  <SelectTime onTimeSelect={handleTimeSelect} />
+                  {/* Popover & Calendar */}
+                  <form onSubmit={form.handleSubmit(handleReservation)} className="space-y-8">
+                    <FormField
+                      control={form.control}
+                      name="date"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel />
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button variant={"outline"} className={`w-[240px] pl-3 text-left font-normal border-[#159030] text-[#159030] bg-white hover:bg-[#159030] hover:text-white`}>
+                                  {field.value ? format(field.value, "dd-MM-yyyy", { locale: localeId }) : <span>Pick a date</span>}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date > new Date() || date < new Date("1900-01-01")} initialFocus />
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </form>
+
+                  <div className="flex flex-col columns-5">
+                    <SelectTime availableTimes={reservation.available_times} onTimeSelect={handleTimeSelect} />
+                  </div>
+                </div>
+
+                <div className="w-full md:w-1/2">
+                  <h2 className="font-semibold mb-3 text-[#159030] text-center mt-3 md:mt-0">Data Pasien</h2>
+
+                  <div className="w-full md:w-1/2 flex flex-col mx-auto mb-3">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#159030]">Nama Lengkap</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Masukkan Nama Lengkap" {...field} />
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="age"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#159030]">Umur</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Masukkan Umur" {...field} />
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="phone_number"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#159030]">Nomor Telepon</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Masukkan Nomor Telepon" {...field} />
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#159030]">Alamat</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Masukkan Alamat" {...field} />
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel htmlFor="gender" className="text-[#159030]">
+                            Jenis Kelamin
+                          </FormLabel>
+                          <FormControl>
+                            <Select onValueChange={(value) => field.onChange(value)} value={field.value}>
+                              <SelectTrigger id="gender">
+                                <SelectValue placeholder="Pilih Jenis Kelamin" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel />
+                                  <SelectItem value="Laki-Laki">Laki-Laki</SelectItem>
+                                  <SelectItem value="Perempuan">Perempuan</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormDescription />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Card */}
+                  <Card className="w-2/3 flex flex-col mx-auto">
+                    <CardHeader>
+                      <CardTitle className="text-center text-lg">Dokter {reservation.specialization}</CardTitle>
+                      <CardDescription />
+                    </CardHeader>
+                    <CardContent className="flex justify-between items-center">
+                      <p>{reservation.desc_day}</p>
+                      <p>{reservation.desc_time}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-center">
+                      <Button onClick={form.handleSubmit(handleReservation)} className="w-full bg-[#159030] hover:bg-green-700">
+                        Buat Reservasi
+                      </Button>
+                    </CardFooter>
+                  </Card>
                 </div>
               </Form>
             </div>
-
-            <div className="w-full md:w-1/2 flex justify-center items-center -mt-[375px]">
-              <Card className="w-2/3">
-                <CardHeader>
-                  <CardTitle className="text-center">Dokter {reservation.specialization}</CardTitle>
-                  <CardDescription />
-                </CardHeader>
-                <CardContent className="flex justify-between items-center">
-                  <p>{reservation.day}</p>
-                  <p>{reservation.time}</p>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button onClick={form.handleSubmit(handleReservation)} className="w-full bg-[#159030] hover:bg-green-700">
-                    Buat Reservasi
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </SignedInPage>
   );
 };
 
