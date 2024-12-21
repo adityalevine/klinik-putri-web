@@ -13,7 +13,7 @@ import Spinner from "@/components/ui/spinner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Toaster, toast } from "react-hot-toast";
 
-const DashboardManagementPage = () => {
+const ReservationManagementPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [histories, setHistories] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -112,7 +112,7 @@ const DashboardManagementPage = () => {
   }, [lastPage]);
 
   return (
-    <AdminLayout title="Antrean Hari Ini">
+    <AdminLayout title="Riwayat Reservasi Pasien">
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />
 
@@ -132,6 +132,7 @@ const DashboardManagementPage = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="text-center text-black">No</TableHead>
+            <TableHead className="text-center text-black">Tanggal</TableHead>
             <TableHead className="text-center text-black">Waktu</TableHead>
             <TableHead className="text-center text-black">Spesialisasi</TableHead>
             <TableHead className="text-center text-black">Pasien</TableHead>
@@ -151,6 +152,7 @@ const DashboardManagementPage = () => {
               return (
                 <TableRow key={history.id}>
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{history.date}</TableCell>
                   <TableCell>{history.time}</TableCell>
                   <TableCell>{history.specialization}</TableCell>
                   <TableCell>{history.name}</TableCell>
@@ -221,4 +223,4 @@ const DashboardManagementPage = () => {
   );
 };
 
-export default DashboardManagementPage;
+export default ReservationManagementPage;

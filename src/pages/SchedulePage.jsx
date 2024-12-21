@@ -1,4 +1,7 @@
+import Spinner from "@/components/ui/spinner";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { axiosInstance } from "@/lib/axios";
+import { useEffect, useState } from "react";
 
 const generalRaw = [
   {
@@ -15,40 +18,29 @@ const generalRaw = [
   },
 ];
 
-const specialistRaw = [
-  {
-    specialty: "Kandungan",
-    doctor: "dr. Imanuel. S. Auparay, Sp.O.G",
-    days: "Senin - Sabtu",
-    time: "19.00 - 21.00",
-  },
-  {
-    specialty: "Kejiwaan",
-    doctor: "dr. Octhavianti Palyngan Sp.KJ",
-    days: "Setiap Hari",
-    time: "15.00 - Selesai",
-  },
-  {
-    specialty: "Bedah",
-    doctor: "dr. Emmy Palingan.Sp.B",
-    days: "Setiap Hari",
-    time: "15.00 - Selesai",
-  },
-  {
-    specialty: "THT-KL",
-    doctor: "dr. Roland Mangonta.Sp.T.H.T.K.L",
-    days: "Setiap Hari",
-    time: "15.00 - Selesai",
-  },
-  {
-    specialty: "Jantung",
-    doctor: "dr. Rini Anastasia, Sp.JP",
-    days: "Setiap Hari",
-    time: "15.00 - Selesai",
-  },
-];
-
 const SchedulePage = () => {
+  const [schedules, setSchedules] = useState([]);
+  const [IsLoading, setIsLoading] = useState(false);
+
+  const fetchSchedules = async () => {
+    try {
+      setIsLoading(true);
+
+      const scheduleResponse = await axiosInstance.get("/schedules_specialization");
+
+      setSchedules(scheduleResponse.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Mount
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
+
   return (
     <main className="min-h-[80vh] pt-36 pb-10 bg-gray-100">
       {/* Dokter Umum & Spesialis Section */}
@@ -74,14 +66,16 @@ const SchedulePage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {generalRaw.map((schedule, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{schedule.time}</TableCell>
-                    {schedule.days.map((doctor, dayIndex) => (
-                      <TableCell key={dayIndex}>{doctor}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
+                <TableRow>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>test</TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </div>
@@ -101,16 +95,24 @@ const SchedulePage = () => {
                   <TableHead className="text-center text-black">Waktu</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {specialistRaw.map((specialist, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{specialist.specialty}</TableCell>
-                    <TableCell>{specialist.doctor}</TableCell>
-                    <TableCell>{specialist.days}</TableCell>
-                    <TableCell>{specialist.time}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              {IsLoading ? (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Spinner />
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableBody>
+                  {schedules.map((schedule) => (
+                    <TableRow key={schedule.id}>
+                      <TableCell>{schedule.specialization}</TableCell>
+                      <TableCell>{schedule.doctor}</TableCell>
+                      <TableCell>{schedule.desc_day}</TableCell>
+                      <TableCell>{schedule.desc_time}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </div>
         </div>

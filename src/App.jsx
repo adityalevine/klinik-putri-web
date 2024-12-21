@@ -10,7 +10,16 @@ import ProfilePage from "./pages/ProfilePage";
 import HistoryPage from "./pages/HistoryPage";
 import ReservationDetailPage from "./pages/ReservationDetailPage";
 import DashboardManagementPage from "./pages/admin/DashboardManagementPage";
-import SpecializationManagementPage from "./pages/admin/SpecializationManagementPage";
+import SpecializationManagementPage from "./pages/admin/specialization/SpecializationManagementPage";
+import CreateSpecializationPage from "./pages/admin/specialization/CreateSpecializationPage";
+import EditSpecializationPage from "./pages/admin/specialization/EditSpecializationPage";
+import DoctorManagementPage from "./pages/admin/doctor/DoctorManagementPage";
+import CreateDoctorPage from "./pages/admin/doctor/CreateDoctorPage";
+import EditDoctorPage from "./pages/admin/doctor/EditDoctorPage";
+import ScheduleSpecializationManagementPage from "./pages/admin/schedule/ScheduleSpecializationManagementPage";
+import CreateScheduleSpecializationPage from "./pages/admin/schedule/CreateScheduleSpecializationPage";
+import EditScheduleSpecializationPage from "./pages/admin/schedule/EditScheduleSpecializationPage";
+import ReservationManagementPage from "./pages/admin/reservation/ReservationManagementPage";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { axiosInstance } from "./lib/axios";
@@ -76,6 +85,15 @@ function App() {
         <Route path="/admin">
           <Route path="dashboard" Component={DashboardManagementPage} />
           <Route path="specialization" Component={SpecializationManagementPage} />
+          <Route path="specialization/create" Component={CreateSpecializationPage} />
+          <Route path="specialization/edit/:specializationId" Component={EditSpecializationPage} />
+          <Route path="doctor" Component={DoctorManagementPage} />
+          <Route path="doctor/create" Component={CreateDoctorPage} />
+          <Route path="doctor/edit/:doctorId" Component={EditDoctorPage} />
+          <Route path="schedule/specialization" Component={ScheduleSpecializationManagementPage} />
+          <Route path="schedule/specialization/create" Component={CreateScheduleSpecializationPage} />
+          <Route path="schedule/specialization/edit/:scheduleSpecializationId" Component={EditScheduleSpecializationPage} />
+          <Route path="reservation" Component={ReservationManagementPage} />
         </Route>
 
         <Route path="*" Component={NotFoundPage} />

@@ -2,15 +2,14 @@ import { IoMenu, IoPersonOutline, IoLogOutOutline, IoMedkitOutline, IoHomeOutlin
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { axiosInstance } from "@/lib/axios";
 import { ChevronRight, LucideCalendarClock, LucideLayoutDashboard, LucideStethoscope } from "lucide-react";
 
 const SidebarItem = ({ children, path, isActive, onClick }) => (
   <Link to={path}>
-    <Button variant="ghost" size="lg" className={`w-full rounded-none justify-start border-r ${isActive ? "text-black bg-gray-100 border-r" : ""}`} onClick={onClick}>
+    <Button variant="ghost" size="lg" className={`w-full rounded-none justify-start ${isActive ? "text-black bg-gray-100 border-r" : ""}`} onClick={onClick}>
       {children}
     </Button>
   </Link>
@@ -18,17 +17,19 @@ const SidebarItem = ({ children, path, isActive, onClick }) => (
 
 export const AdminLayout = ({ title, rightSection, children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // State to toggle visibility of sub-menu
   const [isDoctorScheduleOpen, setIsDoctorScheduleOpen] = useState(false);
 
   const userSelector = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [users, setUsers] = useState([]);
+  console.log(location);
 
   const handleNavigation = (path) => {
-    navigate(path);
+    const currentPath = location.pathname + location.search;
+    if (currentPath !== path) {
+      navigate(path);
+    }
   };
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -64,39 +65,42 @@ export const AdminLayout = ({ title, rightSection, children }) => {
 
         <div className="flex flex-col space-y-0 py-4">
           <h2 className="ms-8 my-5 text-xl font-semibold">Menu</h2>
-          <SidebarItem path="/admin/dashboard" isActive={location.pathname.startsWith("/admin/dashboard")} onClick={() => handleNavigation("/admin/dashboard")}>
+          <SidebarItem path="/admin/dashboard?page=1" isActive={location.pathname.startsWith("/admin/dashboard")} onClick={() => handleNavigation("/admin/dashboard?page=1")}>
             <LucideLayoutDashboard className="h-6 w-6 mr-4" />
             Dashboard
           </SidebarItem>
 
-          <SidebarItem path="/admin/specialization" isActive={location.pathname === "/admin/specialization"} onClick={() => handleNavigation("/admin/specialization")}>
+          <SidebarItem path="/admin/specialization?page=1" isActive={location.pathname === "/admin/specialization"} onClick={() => handleNavigation("/admin/specialization?page=1")}>
             <IoMedkitOutline className="h-6 w-6 mr-4" />
             Spesialisasi
           </SidebarItem>
 
-          <SidebarItem>
+          <SidebarItem path="/admin/doctor?page=1" isActive={location.pathname === "/admin/doctor"} onClick={() => handleNavigation("/admin/doctor?page=1")}>
             <LucideStethoscope className="h-6 w-6 mr-4" />
             Daftar Dokter
           </SidebarItem>
 
-          <SidebarItem onClick={() => setIsDoctorScheduleOpen(!isDoctorScheduleOpen)}>
+          <SidebarItem path={`${location.pathname}${location.search}`} isActive={location.pathname.startsWith("/admin/schedule")} onClick={() => setIsDoctorScheduleOpen(!isDoctorScheduleOpen)}>
             <div className="flex items-center">
               <LucideCalendarClock className="h-6 w-6 mr-4" />
               Jadwal Dokter
             </div>
-            {/* Chevron Right Icon with Rotation on Open */}
             <ChevronRight className={`h-5 w-5 transition-transform mx-20 ${isDoctorScheduleOpen ? "rotate-90" : ""}`} />
           </SidebarItem>
 
           {/* Conditional rendering of sub-menu */}
           {isDoctorScheduleOpen && (
             <div className="ml-8 space-y-2">
-              <SidebarItem onClick={() => handleNavigation("/admin/specialization/doctors/specialist")}>Dokter Spesialis</SidebarItem>
-              <SidebarItem onClick={() => handleNavigation("/admin/specialization/doctors/general")}>Dokter Umum</SidebarItem>
+              <SidebarItem path="/admin/schedule/specialization?page=1" isActive={location.pathname === "/admin/schedule/specialization?page=1"} onClick={() => handleNavigation("/admin/schedule/specialization?page=1")}>
+                Dokter Spesialis
+              </SidebarItem>
+              <SidebarItem path="/admin/schedule/general?page=1" isActive={location.pathname === "/admin/schedule/general?page=1"} onClick={() => handleNavigation("/admin/schedule/general?page=1")}>
+                Dokter Umum
+              </SidebarItem>
             </div>
           )}
 
-          <SidebarItem>
+          <SidebarItem path="/admin/reservation?page=1" isActive={location.pathname === "/admin/reservation"} onClick={() => handleNavigation("/admin/reservation?page=1")}>
             <IoPersonOutline className="h-6 w-6 mr-4" />
             Reservasi
           </SidebarItem>
@@ -119,7 +123,7 @@ export const AdminLayout = ({ title, rightSection, children }) => {
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage src={userSelector.profile_url} />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback />
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" side="bottom" className="w-48 mt-2">

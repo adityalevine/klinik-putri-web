@@ -10,23 +10,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
-import { Toaster, toast } from "react-hot-toast";
-import { SpecializationAddForm } from "@/components/forms/SpecializationAddForm";
-import { SpecializationEditForm } from "@/components/forms/SpecializationEditForm";
 
 const SpecializationManagementPage = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const handleDialogOpen = () => setIsDialogOpen(true);
-  const handleDialogClose = () => setIsDialogOpen(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // New state for Edit dialog
-  const [selectedSpecialization, setSelectedSpecialization] = useState(null); // Store selected specialization
-  const [selectedUserId, setSelectedUserId] = useState(null); // Store selected user ID
-  const handleEditDialogOpen = (specialization, userId) => {
-    setSelectedSpecialization(specialization);
-    setSelectedUserId(userId);
-    setIsEditDialogOpen(true); // Open the edit dialog
-  };
-  const handleEditDialogClose = () => setIsEditDialogOpen(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [reservations, setReservations] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -62,7 +47,7 @@ const SpecializationManagementPage = () => {
     try {
       setIsLoading(true);
 
-      const userResponse = await axiosInstance.get("/reservations", {
+      const specializationResponse = await axiosInstance.get("/reservations", {
         params: {
           _per_page: 5,
           _page: Number(searchParams.get("page")),
@@ -70,9 +55,9 @@ const SpecializationManagementPage = () => {
         },
       });
 
-      setHasNextPage(Boolean(userResponse.data.next));
-      setReservations(userResponse.data.data);
-      setLastPage(userResponse.data.last);
+      setHasNextPage(Boolean(specializationResponse.data.next));
+      setReservations(specializationResponse.data.data);
+      setLastPage(specializationResponse.data.last);
     } catch (err) {
       console.log(err);
     } finally {
@@ -102,21 +87,14 @@ const SpecializationManagementPage = () => {
     <AdminLayout
       title="Daftar Layanan Spesialisasi"
       rightSection={
-        <Button onClick={handleDialogOpen} className="w-28 bg-[#159030] hover:bg-green-700">
-          <IoAdd className="h-6 w-6 mr-2" />
-          Tambah
-        </Button>
+        <Link to="/admin/specialization/create">
+          <Button className="w-28 bg-[#159030] hover:bg-green-700">
+            <IoAdd className="h-6 w-6 mr-2" />
+            Tambah
+          </Button>
+        </Link>
       }
     >
-      {/* Toaster */}
-      <Toaster position="top-center" reverseOrder={false} />
-
-      {/* Dialog Tambah Spesialisasi */}
-      <SpecializationAddForm isOpen={isDialogOpen} onClose={handleDialogClose} />
-
-      {/* Dialog Edit Spesialisasi */}
-      {selectedSpecialization && selectedUserId && <SpecializationEditForm isOpen={isEditDialogOpen} onClose={handleEditDialogClose} specialization={selectedSpecialization} userId={selectedUserId} />}
-
       {/* Search */}
       <div className="mb-8">
         <Label>Cari Nama Spesialisasi</Label>
@@ -151,14 +129,14 @@ const SpecializationManagementPage = () => {
             {reservations.map((reservation, index) => {
               return (
                 <TableRow key={reservation.id}>
-                  <TableCell>{(Number(searchParams.get("page")) - 1) * 5 + index + 1}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{reservation.specialization}</TableCell>
                   <TableCell>{reservation.desc_time}</TableCell>
                   <TableCell>{reservation.desc_day}</TableCell>
                   <TableCell>{reservation.status}</TableCell>
                   <TableCell>
-                    <Link>
-                      <Button onClick={() => handleEditDialogOpen(reservation.specialization, reservation.id)} variant="outline" size="icon" className="text-white hover:text-white bg-[#159030] hover:bg-green-700">
+                    <Link to={"/admin/specialization/edit/" + reservation.id}>
+                      <Button variant="outline" size="icon" className="text-white hover:text-white bg-[#159030] hover:bg-green-700">
                         <Edit className="h-6 w-6" />
                       </Button>
                     </Link>

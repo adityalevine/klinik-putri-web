@@ -4,13 +4,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useSelector } from "react-redux";
 
 export const ReservationCard = (props) => {
-  const { id, image_url, specialization, desc_day, desc_time, status } = props;
+  const { id, image, specialization, desc_day, desc_time, status } = props;
   const userSelector = useSelector((state) => state.user);
 
   return (
     <Card className="shadow-md mb-5">
       <CardHeader className="p-0">
-        <img src={image_url} alt="Layanan Spesialisasi" width={326} className="rounded-lg" />
+        <img src={image} alt="Layanan Spesialisasi" width={326} className="rounded-lg" />
         <CardTitle className="ms-6 text-lg text-[#159030]">{specialization}</CardTitle>
         <CardDescription />
       </CardHeader>
