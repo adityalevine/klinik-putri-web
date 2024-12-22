@@ -16,7 +16,7 @@ const scheduleFormSchema = z.object({
 });
 
 const CreateScheduleSpecializationPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm({
@@ -57,7 +57,7 @@ const CreateScheduleSpecializationPage = () => {
   return (
     <AdminLayout title="Buat Jadwal Dokter Spesialisasi">
       {/* Form */}
-      <ScheduleSpecializationForm cardTitle="Tambahkan Jadwal Dokter baru" form={form} state={IsLoading} onSubmit={handleCreateScheduleSpecialization} />
+      <ScheduleSpecializationForm cardTitle="Tambahkan Jadwal Dokter baru" form={form} state={isLoading} onSubmit={handleCreateScheduleSpecialization} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

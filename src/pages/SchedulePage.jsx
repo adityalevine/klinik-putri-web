@@ -3,32 +3,32 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { axiosInstance } from "@/lib/axios";
 import { useEffect, useState } from "react";
 
-const generalRaw = [
-  {
-    time: "08.00 - 14.00",
-    days: ["dr. Loretha", "dr. Gally", "dr. Christin", "dr. Rona", "dr. Loretha", "dr. Loretha", "dr. Rona"],
-  },
-  {
-    time: "14.00 - 21.00",
-    days: ["dr. Loretha", "dr. Gally", "dr. Patrick", "dr. Rona", "dr. Christin", "dr. Patrick", "dr. Rona"],
-  },
-  {
-    time: "21.00 - 08.00",
-    days: ["dr. Rona", "dr. Gally", "dr. Patrick", "dr. Rona", "dr. Gally", "dr. Patrick", "dr. Rona"],
-  },
-];
-
 const SchedulePage = () => {
-  const [schedules, setSchedules] = useState([]);
-  const [IsLoading, setIsLoading] = useState(false);
+  const [scheduleGeneral, setSheduleGeneral] = useState([]);
+  const [scheduleSpecialization, setScheduleSpecialization] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchSchedules = async () => {
+  const fetchScheduleGeneral = async () => {
+    try {
+      setIsLoading(true);
+
+      const scheduleResponse = await axiosInstance.get("/schedules_general");
+
+      setSheduleGeneral(scheduleResponse.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchScheduleSpecialization = async () => {
     try {
       setIsLoading(true);
 
       const scheduleResponse = await axiosInstance.get("/schedules_specialization");
 
-      setSchedules(scheduleResponse.data);
+      setScheduleSpecialization(scheduleResponse.data);
     } catch (err) {
       console.log(err);
     } finally {
@@ -38,7 +38,8 @@ const SchedulePage = () => {
 
   // Mount
   useEffect(() => {
-    fetchSchedules();
+    fetchScheduleGeneral();
+    fetchScheduleSpecialization();
   }, []);
 
   return (
@@ -65,18 +66,28 @@ const SchedulePage = () => {
                   <TableHead className="text-center text-black">Minggu</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              {isLoading ? (
                 <TableRow>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
-                  <TableCell>test</TableCell>
+                  <TableCell colSpan={8}>
+                    <Spinner />
+                  </TableCell>
                 </TableRow>
-              </TableBody>
+              ) : (
+                <TableBody>
+                  {scheduleGeneral.map((schedule, index) => (
+                    <TableRow key={`general-${schedule.id}-${index}`}>
+                      <TableCell>{schedule.time}</TableCell>
+                      <TableCell>{schedule.monday}</TableCell>
+                      <TableCell>{schedule.tuesday}</TableCell>
+                      <TableCell>{schedule.wednesday}</TableCell>
+                      <TableCell>{schedule.thursday}</TableCell>
+                      <TableCell>{schedule.friday}</TableCell>
+                      <TableCell>{schedule.saturday}</TableCell>
+                      <TableCell>{schedule.sunday}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </div>
 
@@ -95,7 +106,7 @@ const SchedulePage = () => {
                   <TableHead className="text-center text-black">Waktu</TableHead>
                 </TableRow>
               </TableHeader>
-              {IsLoading ? (
+              {isLoading ? (
                 <TableRow>
                   <TableCell colSpan={8}>
                     <Spinner />
@@ -103,8 +114,8 @@ const SchedulePage = () => {
                 </TableRow>
               ) : (
                 <TableBody>
-                  {schedules.map((schedule) => (
-                    <TableRow key={schedule.id}>
+                  {scheduleSpecialization.map((schedule, index) => (
+                    <TableRow key={`general-${schedule.id}-${index}`}>
                       <TableCell>{schedule.specialization}</TableCell>
                       <TableCell>{schedule.doctor}</TableCell>
                       <TableCell>{schedule.desc_day}</TableCell>

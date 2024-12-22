@@ -21,7 +21,7 @@ const specializationFormSchema = z.object({
 });
 
 const CreateSpecializationPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm({
@@ -75,7 +75,7 @@ const CreateSpecializationPage = () => {
   return (
     <AdminLayout title="Buat Spesialisasi">
       {/* Form */}
-      <SpecializationForm cardTitle="Tambahkan spesialisasi baru" form={form} state={IsLoading} onSubmit={handleCreateSpecialization} />
+      <SpecializationForm cardTitle="Tambahkan spesialisasi baru" form={form} state={isLoading} onSubmit={handleCreateSpecialization} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

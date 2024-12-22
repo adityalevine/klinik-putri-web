@@ -18,7 +18,7 @@ const DashboardManagementPage = () => {
   const [histories, setHistories] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [userName, setUserName] = useState("");
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [lastPage, setLastPage] = useState(null);
 
   const handleNextPage = () => {
@@ -139,7 +139,7 @@ const DashboardManagementPage = () => {
             <TableHead className="text-center text-black">Aksi</TableHead>
           </TableRow>
         </TableHeader>
-        {IsLoading ? (
+        {isLoading ? (
           <TableRow>
             <TableCell colSpan={8}>
               <Spinner />
@@ -150,7 +150,7 @@ const DashboardManagementPage = () => {
             {histories.map((history, index) => {
               return (
                 <TableRow key={history.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{(Number(searchParams.get("page")) - 1) * 5 + index + 1}</TableCell>
                   <TableCell>{history.time}</TableCell>
                   <TableCell>{history.specialization}</TableCell>
                   <TableCell>{history.name}</TableCell>

@@ -11,7 +11,7 @@ import { SignedInPage } from "@/components/guard/SignedInPage";
 
 const HistoryPage = () => {
   const [histories, setHistories] = useState([]);
-  const [historyIsLoading, setHistoryIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const userSelector = useSelector((state) => state.user);
 
   const handleDeleteHistory = async (historyId) => {
@@ -42,7 +42,7 @@ const HistoryPage = () => {
 
   const fetchHistory = async () => {
     try {
-      setHistoryIsLoading(true);
+      setIsLoading(true);
 
       const historyResponse = await axiosInstance.get("/history", {
         params: {
@@ -54,7 +54,7 @@ const HistoryPage = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      setHistoryIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +105,7 @@ const HistoryPage = () => {
                   <TableHead className="text-center text-black">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
-              {historyIsLoading ? (
+              {isLoading ? (
                 <TableRow>
                   <TableCell colSpan={8}>
                     <Spinner />

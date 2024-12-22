@@ -15,7 +15,7 @@ const doctorFormSchema = z.object({
 });
 
 const EditDoctorPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [doctor, setDoctor] = useState({
     id: "",
     name: "",
@@ -71,7 +71,7 @@ const EditDoctorPage = () => {
     fetchDoctor();
   }, []);
 
-  // Mount
+  // Mount & Update
   useEffect(() => {
     if (doctor.id) {
       form.reset({
@@ -85,7 +85,7 @@ const EditDoctorPage = () => {
   return (
     <AdminLayout title="Edit Dokter">
       {/* Form */}
-      <DoctorForm cardTitle="Edit Dokter" form={form} state={IsLoading} onSubmit={handleEditDoctor} />
+      <DoctorForm cardTitle="Edit Dokter" form={form} state={isLoading} onSubmit={handleEditDoctor} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

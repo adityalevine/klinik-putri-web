@@ -19,46 +19,17 @@ import EditDoctorPage from "./pages/admin/doctor/EditDoctorPage";
 import ScheduleSpecializationManagementPage from "./pages/admin/schedule/ScheduleSpecializationManagementPage";
 import CreateScheduleSpecializationPage from "./pages/admin/schedule/CreateScheduleSpecializationPage";
 import EditScheduleSpecializationPage from "./pages/admin/schedule/EditScheduleSpecializationPage";
+import ScheduleGeneralManagementPage from "./pages/admin/schedule/ScheduleGeneralManagementPage";
+import CreateScheduleGeneralPage from "./pages/admin/schedule/CreateScheduleGeneralPage";
+import EditScheduleGeneralPage from "./pages/admin/schedule/EditScheduleGeneralPage.jsx";
 import ReservationManagementPage from "./pages/admin/reservation/ReservationManagementPage";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { axiosInstance } from "./lib/axios";
-import { useEffect, useState } from "react";
 import Spinner from "./components/ui/spinner";
+import { useHydration } from "./hooks/useHydration";
 
 function App() {
   const location = useLocation();
-  const dispatch = useDispatch();
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  const hydrateAuth = async () => {
-    try {
-      const currentUser = localStorage.getItem("current-user");
-
-      if (!currentUser) return;
-
-      const userResponse = await axiosInstance.get("/users/" + currentUser);
-
-      dispatch({
-        type: "USER_LOGIN",
-        payload: {
-          id: userResponse.data.id,
-          role: userResponse.data.role,
-          name: userResponse.data.name,
-          username: userResponse.data.username,
-          profile_url: userResponse.data.profile_url,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsHydrated(true);
-    }
-  };
-
-  useEffect(() => {
-    hydrateAuth();
-  }, []);
+  const { isHydrated } = useHydration();
 
   if (!isHydrated) {
     return (
@@ -93,6 +64,9 @@ function App() {
           <Route path="schedule/specialization" Component={ScheduleSpecializationManagementPage} />
           <Route path="schedule/specialization/create" Component={CreateScheduleSpecializationPage} />
           <Route path="schedule/specialization/edit/:scheduleSpecializationId" Component={EditScheduleSpecializationPage} />
+          <Route path="schedule/general" Component={ScheduleGeneralManagementPage} />
+          <Route path="schedule/general/create" Component={CreateScheduleGeneralPage} />
+          <Route path="schedule/general/edit/:scheduleGeneralId" Component={EditScheduleGeneralPage} />
           <Route path="reservation" Component={ReservationManagementPage} />
         </Route>
 

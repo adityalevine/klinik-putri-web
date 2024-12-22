@@ -16,7 +16,7 @@ const scheduleFormSchema = z.object({
 });
 
 const EditScheduleSpecializationPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState({
     id: "",
     doctor: "",
@@ -75,7 +75,7 @@ const EditScheduleSpecializationPage = () => {
     fetchSchedule();
   }, []);
 
-  // Mount
+  // Mount & Update
   useEffect(() => {
     if (schedules.id) {
       form.reset({
@@ -90,7 +90,7 @@ const EditScheduleSpecializationPage = () => {
   return (
     <AdminLayout title="Edit Jadwal Dokter Spesialisasi">
       {/* Form */}
-      <ScheduleSpecializationForm cardTitle="Edit Jadwal Dokter Spesialisasi" form={form} state={IsLoading} onSubmit={handleEditScheduleSpecialization} />
+      <ScheduleSpecializationForm cardTitle="Edit Jadwal Dokter Spesialisasi" form={form} state={isLoading} onSubmit={handleEditScheduleSpecialization} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

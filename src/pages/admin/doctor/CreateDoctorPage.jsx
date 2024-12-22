@@ -15,7 +15,7 @@ const doctorFormSchema = z.object({
 });
 
 const CreateDoctorPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm({
@@ -65,7 +65,7 @@ const CreateDoctorPage = () => {
   return (
     <AdminLayout title="Buat Dokter">
       {/* Form */}
-      <DoctorForm cardTitle="Tambahkan Dokter baru" form={form} state={IsLoading} onSubmit={handleCreateDoctor} />
+      <DoctorForm cardTitle="Tambahkan Dokter baru" form={form} state={isLoading} onSubmit={handleCreateDoctor} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

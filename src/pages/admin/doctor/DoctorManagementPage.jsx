@@ -16,7 +16,7 @@ const DoctorManagementPage = () => {
   const [doctors, setDoctors] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [doctorName, setDoctorName] = useState("");
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [lastPage, setLastPage] = useState(null);
 
   const handleNextPage = () => {
@@ -88,7 +88,7 @@ const DoctorManagementPage = () => {
       title="Daftar Dokter"
       rightSection={
         <Link to="/admin/doctor/create">
-          <Button className="w-28 bg-[#159030] hover:bg-green-700">
+          <Button className="w-28 bg-[#159030] hover:bg-green-700 mt-5 md:mt-0">
             <IoAdd className="h-6 w-6 mr-2" />
             Tambah
           </Button>
@@ -117,7 +117,7 @@ const DoctorManagementPage = () => {
             <TableHead className="text-center text-black">Aksi</TableHead>
           </TableRow>
         </TableHeader>
-        {IsLoading ? (
+        {isLoading ? (
           <TableRow>
             <TableCell colSpan={8}>
               <Spinner />
@@ -128,7 +128,7 @@ const DoctorManagementPage = () => {
             {doctors.map((doctor, index) => {
               return (
                 <TableRow key={doctor.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{(Number(searchParams.get("page")) - 1) * 5 + index + 1}</TableCell>
                   <TableCell>{doctor.specialization}</TableCell>
                   <TableCell>{doctor.name}</TableCell>
                   <TableCell>{doctor.status}</TableCell>

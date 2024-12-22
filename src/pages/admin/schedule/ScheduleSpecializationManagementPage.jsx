@@ -15,8 +15,8 @@ const ScheduleSpecializationManagementPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [schedules, setSchedules] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [doctorName, setDoctorName] = useState("");
-  const [IsLoading, setIsLoading] = useState(false);
+  const [timeName, setTimeName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [lastPage, setLastPage] = useState(null);
 
   const handleNextPage = () => {
@@ -32,8 +32,8 @@ const ScheduleSpecializationManagementPage = () => {
   };
 
   const searchDoctor = () => {
-    if (doctorName) {
-      searchParams.set("search", doctorName);
+    if (timeName) {
+      searchParams.set("search", timeName);
 
       setSearchParams(searchParams);
     } else {
@@ -51,7 +51,7 @@ const ScheduleSpecializationManagementPage = () => {
         params: {
           _per_page: 5,
           _page: Number(searchParams.get("page")),
-          doctor: searchParams.get("search"),
+          desc_time: searchParams.get("search"),
         },
       });
 
@@ -88,7 +88,7 @@ const ScheduleSpecializationManagementPage = () => {
       title="Jadwal Dokter Spesialis"
       rightSection={
         <Link to="/admin/schedule/specialization/create">
-          <Button className="w-28 bg-[#159030] hover:bg-green-700">
+          <Button className="w-28 bg-[#159030] hover:bg-green-700 mt-5 md:mt-0">
             <IoAdd className="h-6 w-6 mr-2" />
             Tambah
           </Button>
@@ -97,9 +97,9 @@ const ScheduleSpecializationManagementPage = () => {
     >
       {/* Search */}
       <div className="mb-8">
-        <Label>Cari Nama Dokter</Label>
+        <Label>Cari Waktu</Label>
         <div className="flex gap-4">
-          <Input value={doctorName} onChange={(e) => setDoctorName(e.target.value)} className="w-[250px] lg:w-[400px]" placeholder="Cari dokter..." />
+          <Input value={timeName} onChange={(e) => setTimeName(e.target.value)} className="w-[250px] lg:w-[400px]" placeholder="Cari waktu..." />
           <Button onClick={searchDoctor} className="bg-[#159030] hover:bg-green-700">
             Cari
           </Button>
@@ -118,7 +118,7 @@ const ScheduleSpecializationManagementPage = () => {
             <TableHead className="text-center text-black">Aksi</TableHead>
           </TableRow>
         </TableHeader>
-        {IsLoading ? (
+        {isLoading ? (
           <TableRow>
             <TableCell colSpan={8}>
               <Spinner />
@@ -129,7 +129,7 @@ const ScheduleSpecializationManagementPage = () => {
             {schedules.map((schedule, index) => {
               return (
                 <TableRow key={schedule.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{(Number(searchParams.get("page")) - 1) * 5 + index + 1}</TableCell>
                   <TableCell>{schedule.specialization}</TableCell>
                   <TableCell>{schedule.doctor}</TableCell>
                   <TableCell>{schedule.desc_day}</TableCell>

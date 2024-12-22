@@ -21,7 +21,7 @@ const specializationFormSchema = z.object({
 });
 
 const EditSpecializationPage = () => {
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [specialization, setSpecialization] = useState({
     id: "",
     image: "",
@@ -83,7 +83,7 @@ const EditSpecializationPage = () => {
     fetchSpecialization();
   }, []);
 
-  // Mount
+  // Mount & Update
   useEffect(() => {
     if (specialization.id) {
       form.reset({
@@ -99,7 +99,7 @@ const EditSpecializationPage = () => {
   return (
     <AdminLayout title="Edit Spesialisasi">
       {/* Form */}
-      <SpecializationForm cardTitle="Edit Spesialisasi" form={form} state={IsLoading} onSubmit={handleEditSpecialization} />
+      <SpecializationForm cardTitle="Edit Spesialisasi" form={form} state={isLoading} onSubmit={handleEditSpecialization} />
 
       {/* Toaster */}
       <Toaster position="top-center" reverseOrder={false} />

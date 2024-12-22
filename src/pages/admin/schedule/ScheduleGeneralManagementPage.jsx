@@ -11,11 +11,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 
-const SpecializationManagementPage = () => {
+const ScheduleGeneralManagementPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [reservations, setReservations] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [specializationName, setSpecializationName] = useState("");
+  const [timeName, setTimeName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastPage, setLastPage] = useState(null);
 
@@ -31,9 +31,9 @@ const SpecializationManagementPage = () => {
     setSearchParams(searchParams);
   };
 
-  const searchSpecialization = () => {
-    if (specializationName) {
-      searchParams.set("search", specializationName);
+  const searchDoctor = () => {
+    if (timeName) {
+      searchParams.set("search", timeName);
 
       setSearchParams(searchParams);
     } else {
@@ -43,21 +43,21 @@ const SpecializationManagementPage = () => {
     }
   };
 
-  const fetchReservations = async () => {
+  const fetchSchedules = async () => {
     try {
       setIsLoading(true);
 
-      const specializationResponse = await axiosInstance.get("/reservations", {
+      const scheduleResponse = await axiosInstance.get("/schedules_general", {
         params: {
           _per_page: 5,
           _page: Number(searchParams.get("page")),
-          specialization: searchParams.get("search"),
+          time: searchParams.get("search"),
         },
       });
 
-      setHasNextPage(Boolean(specializationResponse.data.next));
-      setReservations(specializationResponse.data.data);
-      setLastPage(specializationResponse.data.last);
+      setHasNextPage(Boolean(scheduleResponse.data.next));
+      setSchedules(scheduleResponse.data.data);
+      setLastPage(scheduleResponse.data.last);
     } catch (err) {
       console.log(err);
     } finally {
@@ -68,7 +68,7 @@ const SpecializationManagementPage = () => {
   // Mount & Update
   useEffect(() => {
     if (searchParams.get("page")) {
-      fetchReservations();
+      fetchSchedules();
     }
   }, [searchParams.get("page"), searchParams.get("search")]);
 
@@ -85,9 +85,9 @@ const SpecializationManagementPage = () => {
 
   return (
     <AdminLayout
-      title="Daftar Layanan Spesialisasi"
+      title="Jadwal Dokter Umum"
       rightSection={
-        <Link to="/admin/specialization/create">
+        <Link to="/admin/schedule/general/create">
           <Button className="w-28 bg-[#159030] hover:bg-green-700 mt-5 md:mt-0">
             <IoAdd className="h-6 w-6 mr-2" />
             Tambah
@@ -97,10 +97,10 @@ const SpecializationManagementPage = () => {
     >
       {/* Search */}
       <div className="mb-8">
-        <Label>Cari Nama Spesialisasi</Label>
+        <Label>Cari Waktu</Label>
         <div className="flex gap-4">
-          <Input value={specializationName} onChange={(e) => setSpecializationName(e.target.value)} className="w-[250px] lg:w-[400px]" placeholder="Cari spesialisasi..." />
-          <Button onClick={searchSpecialization} className="bg-[#159030] hover:bg-green-700">
+          <Input value={timeName} onChange={(e) => setTimeName(e.target.value)} className="w-[250px] lg:w-[400px]" placeholder="Cari waktu..." />
+          <Button onClick={searchDoctor} className="bg-[#159030] hover:bg-green-700">
             Cari
           </Button>
         </div>
@@ -110,11 +110,14 @@ const SpecializationManagementPage = () => {
       <Table className="p-4 text-center border rounded-md">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center text-black">No</TableHead>
-            <TableHead className="text-center text-black">Spesialisasi</TableHead>
-            <TableHead className="text-center text-black">Jam Layanan</TableHead>
-            <TableHead className="text-center text-black">Hari</TableHead>
-            <TableHead className="text-center text-black">Status</TableHead>
+            <TableHead className="text-center text-black">Waktu (WIT)</TableHead>
+            <TableHead className="text-center text-black">Senin</TableHead>
+            <TableHead className="text-center text-black">Selasa</TableHead>
+            <TableHead className="text-center text-black">Rabu</TableHead>
+            <TableHead className="text-center text-black">Kamis</TableHead>
+            <TableHead className="text-center text-black">Jumat</TableHead>
+            <TableHead className="text-center text-black">Sabtu</TableHead>
+            <TableHead className="text-center text-black">Minggu</TableHead>
             <TableHead className="text-center text-black">Aksi</TableHead>
           </TableRow>
         </TableHeader>
@@ -126,16 +129,19 @@ const SpecializationManagementPage = () => {
           </TableRow>
         ) : (
           <TableBody>
-            {reservations.map((reservation, index) => {
+            {schedules.map((schedule) => {
               return (
-                <TableRow key={reservation.id}>
-                  <TableCell>{(Number(searchParams.get("page")) - 1) * 5 + index + 1}</TableCell>
-                  <TableCell>{reservation.specialization}</TableCell>
-                  <TableCell>{reservation.desc_time}</TableCell>
-                  <TableCell>{reservation.desc_day}</TableCell>
-                  <TableCell>{reservation.status}</TableCell>
+                <TableRow key={schedule.id}>
+                  <TableCell>{schedule.time}</TableCell>
+                  <TableCell>{schedule.monday}</TableCell>
+                  <TableCell>{schedule.tuesday}</TableCell>
+                  <TableCell>{schedule.wednesday}</TableCell>
+                  <TableCell>{schedule.thursday}</TableCell>
+                  <TableCell>{schedule.friday}</TableCell>
+                  <TableCell>{schedule.saturday}</TableCell>
+                  <TableCell>{schedule.sunday}</TableCell>
                   <TableCell>
-                    <Link to={"/admin/specialization/edit/" + reservation.id}>
+                    <Link to={"/admin/schedule/general/edit/" + schedule.id}>
                       <Button variant="outline" size="icon" className="text-white hover:text-white bg-[#159030] hover:bg-green-700">
                         <Edit className="h-6 w-6" />
                       </Button>
@@ -171,4 +177,4 @@ const SpecializationManagementPage = () => {
   );
 };
 
-export default SpecializationManagementPage;
+export default ScheduleGeneralManagementPage;

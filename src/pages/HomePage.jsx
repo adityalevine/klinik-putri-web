@@ -12,7 +12,7 @@ const HomePage = () => {
   };
 
   const [reservations, setReservations] = useState([]);
-  const [IsLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const reservationsList = reservations.map((reservation) => {
     return <ReservationCard key={reservation.id} id={reservation.id} image={reservation.image} specialization={reservation.specialization} desc_day={reservation.desc_day} desc_time={reservation.desc_time} status={reservation.status} />;
@@ -68,7 +68,7 @@ const HomePage = () => {
           <div className="flex flex-col">
             <h2 className="flex justify-center items-center text-2xl font-semibold pt-20 pb-5 text-[#159030]">Layanan Spesialisasi</h2>
 
-            <div className="flex flex-wrap justify-center items-center columns-3 gap-5">{IsLoading ? <Spinner /> : <>{reservationsList}</>}</div>
+            <div className="flex flex-wrap justify-center items-center columns-3 gap-5">{isLoading ? <Spinner /> : <>{reservationsList}</>}</div>
           </div>
         </div>
       </section>
