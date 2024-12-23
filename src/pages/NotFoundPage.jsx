@@ -8,7 +8,7 @@ const NotFoundPage = () => {
         {/* Not Found Section */}
         <section>
           <div className="container flex flex-col justify-center items-center text-center gap-6">
-            <img src="/404.svg" alt="Oops! Sepertinya Anda tersesat" className="max-w-full h-auto" />
+            <img src="/404.png" alt="Oops! Sepertinya Anda tersesat" className="max-w-full h-auto" />
             <p className="text-xl sm:text-3xl font-bold">Oops! Sepertinya kamu tersesat</p>
             <Link to="/">
               <Button>Kembali</Button>
